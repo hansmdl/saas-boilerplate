@@ -9,7 +9,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "db": ["../../packages/db"],
-      "config/*": ["../../packages/config/*"]
+      "config/*": ["../../packages/config/*"],
+      "email": ["../../packages/email"]
     },
     "typeRoots": ["../../node_modules/@types", "./node_modules/@types"]
   },

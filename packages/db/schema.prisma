@@ -38,6 +38,7 @@ model User {
   // Relaciones para Auth
   accounts       Account[]
   sessions       Session[]
+  emailVerificationTokens EmailVerificationToken[]
 
   // Campos para 2FA
   twoFactorAuthenticationSecret   String?
@@ -185,4 +186,16 @@ model PasswordResetToken {
   createdAt DateTime @default(now())
 
   @@unique([email, token])
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, token])
 }

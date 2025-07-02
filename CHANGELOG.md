@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implemented email/password login endpoint.
 - Implemented session validation (`/me`) and logout endpoints.
 - Added `AuthGuard` for protecting routes.
+- Implemented password recovery flow.
+- Implemented email verification flow.
 
 ### Changed
 
