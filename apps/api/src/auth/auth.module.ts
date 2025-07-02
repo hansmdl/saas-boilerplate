@@ -1,17 +1,25 @@
 import { Module } from '@nestjs/common';
-import { lucia } from './lucia';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { AuthService } from './auth.service.js';
+import { AuthController } from './auth.controller.js';
+import { LocalStrategy } from './strategies/local.strategy.js';
+import { JwtStrategy } from './strategies/jwt.strategy.js';
+import { EmailModule } from 'email';
+import { DbModule } from 'db';
 
 @Module({
-  controllers: [AuthController],
-  providers: [
-    {
-      provide: 'LUCIA',
-      useValue: lucia,
-    },
-    AuthService,
+  imports: [
+    EmailModule,
+    DbModule,
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '1h' },
+    }),
   ],
-  exports: ['LUCIA', AuthService],
+  controllers: [AuthController],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
+  exports: [AuthService],
 })
 export class AuthModule {}

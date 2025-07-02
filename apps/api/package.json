@@ -2,24 +2,34 @@
   "name": "api",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "nest build --watch",
+    "dev": "dotenv -e ../../.env -- nest start --watch",
     "build": "nest build -p tsconfig.json",
+    "build:tsc": "tsc -p tsconfig.json --listEmittedFiles",
+    "start:dev": "nest start --watch",
     "start": "node dist/main",
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
-    "@lucia-auth/adapter-prisma": "^4.0.1",
     "@nestjs/common": "~11.1.3",
     "@nestjs/core": "~11.1.3",
+    "@nestjs/jwt": "^11.0.0",
     "@nestjs/mapped-types": "^2.1.0",
+    "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "~11.1.3",
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.9",
     "@types/express": "^5.0.3",
+    "@types/passport-jwt": "^4.0.1",
+    "@types/passport-local": "^1.0.38",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
-    "lucia": "^3.2.2",
+    "db": "workspace:*",
+    "email": "workspace:*",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "zod": "^3.25.68"
@@ -34,6 +44,8 @@
     "eslint": "8.56.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "~5.8.3"
   }
 }

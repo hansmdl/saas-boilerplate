@@ -4,27 +4,20 @@ import {
   Get,
   Param,
   Post,
-  Res,
+  Request,
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import type { RegisterDto } from './dto/register.dto';
-import { registerSchema } from './dto/register.dto';
-import { ZodValidationPipe } from '../pipes/zod.pipe';
-import { loginSchema } from './dto/login.dto';
-import type { LoginDto } from './dto/login.dto';
-import { forgotPasswordSchema } from './dto/forgot-password.dto';
-import type { ForgotPasswordDto } from './dto/forgot-password.dto';
-import { resetPasswordSchema } from './dto/reset-password.dto';
-import type { ResetPasswordDto } from './dto/reset-password.dto';
-import { sendVerificationEmailSchema } from './dto/send-verification-email.dto';
-import type { SendVerificationEmailDto } from './dto/send-verification-email.dto';
-import { AuthGuard } from './lucia.guard';
-import { CurrentUser } from './decorators/user.decorator';
-import { CurrentSession } from './decorators/session.decorator';
-import type { User, Session } from 'lucia';
-import type { Response } from 'express';
+import { AuthGuard } from '@nestjs/passport';
+import { AuthService } from './auth.service.js';
+import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
+import { ZodValidationPipe } from '../pipes/zod.pipe.js';
+import { registerSchema, type RegisterDto } from './dto/register.dto.js';
+import { loginSchema } from './dto/login.dto.js';
+import { forgotPasswordSchema, type ForgotPasswordDto } from './dto/forgot-password.dto.js';
+import { resetPasswordSchema, type ResetPasswordDto } from './dto/reset-password.dto.js';
+import { CurrentUser } from './decorators/user.decorator.js';
+import type { User } from 'db';
 
 @Controller('auth')
 export class AuthController {
@@ -32,33 +25,22 @@ export class AuthController {
 
   @Post('register')
   @UsePipes(new ZodValidationPipe(registerSchema))
-  async register(@Body() registerDto: RegisterDto, @Res({ passthrough: true }) response: Response) {
-    const sessionCookie = await this.authService.register(registerDto);
-    response.setHeader('Set-Cookie', sessionCookie.serialize());
-    return { message: 'User registered successfully' };
+  async register(@Body() registerDto: RegisterDto) {
+    await this.authService.register(registerDto);
+    return { message: 'User registered successfully. Please check your email for verification.' };
   }
 
+  @UseGuards(AuthGuard('local'))
   @Post('login')
   @UsePipes(new ZodValidationPipe(loginSchema))
-  async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) response: Response) {
-    const sessionCookie = await this.authService.login(loginDto);
-    response.setHeader('Set-Cookie', sessionCookie.serialize());
-    return { message: 'Logged in successfully' };
+  async login(@Request() req: { user: Omit<User, 'password'> }) {
+    // LocalAuthGuard has already validated the user and attached it to the request
+    return this.authService.login(req.user);
   }
 
-  @Post('logout')
-  @UseGuards(AuthGuard)
-  async logout(@CurrentSession() session: Session, @Res({ passthrough: true }) response: Response) {
-    await this.authService.logout(session.id);
-    // Here you should also clear the cookie from the client
-    // For example, by setting an expired cookie
-    response.clearCookie('lucia_session');
-    return { message: 'Logged out successfully' };
-  }
-
+  @UseGuards(JwtAuthGuard)
   @Get('me')
-  @UseGuards(AuthGuard)
-  async me(@CurrentUser() user: User) {
+  async me(@CurrentUser() user: Omit<User, 'password'>) {
     return user;
   }
 
@@ -76,9 +58,9 @@ export class AuthController {
     return { message: 'Password has been reset successfully' };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('send-verification-email')
-  @UseGuards(AuthGuard)
-  async sendVerificationEmail(@CurrentUser() user: User) {
+  async sendVerificationEmail(@CurrentUser() user: Omit<User, 'password'>) {
     await this.authService.sendVerificationEmail({ email: user.email });
     return { message: 'Verification email sent' };
   }

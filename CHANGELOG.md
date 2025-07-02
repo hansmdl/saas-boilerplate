@@ -7,44 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-- `Account` model to support OAuth social logins.
-- `Session` model to manage user refresh tokens.
-- `PasswordResetToken` model for the password recovery flow.
-- Initial `AuthModule` and `AuthService` setup in the API.
-- Configured Lucia Auth with Prisma adapter.
-- Implemented email/password registration endpoint.
-- Implemented email/password login endpoint.
-- Implemented session validation (`/me`) and logout endpoints.
-- Added `AuthGuard` for protecting routes.
-- Implemented password recovery flow.
-- Implemented email verification flow.
-
 ### Changed
 
-- Updated `Subscription` model with `trialStart` and `trialEnd` fields.
-- Swapped `bcryptjs` for `bcrypt` due to typing issues.
-
-### Notes
-
-- Magic Links, Social Login (OAuth), and 2FA functionalities are deferred to a future stage.
-
-### Deprecated
-
--
+- **Major Authentication Refactor**: Replaced the deprecated `lucia-auth` library with a robust implementation using `Passport.js` (`@nestjs/passport`, `@nestjs/jwt`, `passport-local`, `passport-jwt`). The new system uses stateless JWTs for session management.
 
 ### Removed
 
--
+- Removed `lucia` and `@lucia-auth/adapter-prisma` dependencies.
+- Removed `Session` and `Account` models from the Prisma schema as they were specific to the old authentication system.
 
 ### Fixed
 
--
-
-### Security
-
--
+- **Monorepo Build System**: Corrected multiple issues preventing the backend from starting.
+- **TypeScript Configuration**: Fixed `tsconfig.json` files for shared packages (`db`, `email`) to ensure they are compiled correctly (`noEmit: false`).
+- **Module Resolution**: Resolved `ERR_MODULE_NOT_FOUND` errors by aligning package module systems (`CommonJS` vs `ESNext`) and adding explicit workspace dependencies.
+- **Dependency Conflicts**: Addressed and resolved numerous peer dependency conflicts, particularly with `eslint` and `@typescript-eslint`.
+- **Environment Loading**: Ensured the API server correctly loads environment variables from the root `.env` file on startup.
 
 ## [0.1.0] - 2025-07-02
 

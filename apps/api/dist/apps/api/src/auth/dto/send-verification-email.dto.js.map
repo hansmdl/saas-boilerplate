@@ -1,0 +1,1 @@
+{"version":3,"file":"send-verification-email.dto.js","sourceRoot":"","sources":["../../../../../../src/auth/dto/send-verification-email.dto.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,CAAC,EAAE,MAAM,KAAK,CAAC;AAExB,MAAM,CAAC,MAAM,2BAA2B,GAAG,CAAC,CAAC,MAAM,CAAC;IAClD,KAAK,EAAE,CAAC,CAAC,MAAM,EAAE,CAAC,KAAK,CAAC,uBAAuB,CAAC;CACjD,CAAC,CAAC"}

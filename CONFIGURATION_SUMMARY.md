@@ -11,18 +11,18 @@ This document provides a complete overview of all the configuration files and de
   "type": "module",
   "scripts": {
     "build": "pnpm --filter \"./apps/*\" --filter \"./packages/*\" build",
-    "dev": "pnpm --filter \"./apps/*\" --parallel dev",
+    "dev": "pnpm --filter \"./packages/*\" build && pnpm --filter \"./apps/*\" --parallel dev",
     "lint": "pnpm --filter \"./apps/*\" --filter \"./packages/*\" lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "db:push": "pnpm --filter db db:push"
   },
   "devDependencies": {
-    "@eslint/js": "^9.30.1",
+    "@eslint/js": "8.57.1",
     "@rushstack/eslint-patch": "^1.12.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "dotenv-cli": "^8.0.0",
-    "eslint": "^9.30.1",
+    "eslint": "8.57.1",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.2.0",
     "eslint-plugin-react": "^7.37.5",
@@ -34,6 +34,13 @@ This document provides a complete overview of all the configuration files and de
   "packageManager": "pnpm@10.12.4",
   "engines": {
     "node": ">=22.17.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "eslint": "^8.57.0",
+      "@typescript-eslint/eslint-plugin": "^8.0.0",
+      "@typescript-eslint/parser": "^8.0.0"
+    }
   },
   "dependencies": {
     "@types/react": "^19.1.8",
@@ -96,97 +103,6 @@ This document provides a complete overview of all the configuration files and de
 }
 ```
 
-## `apps/web/package.json`
-
-```json
-{
-  "name": "web",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "next": "~15.3.x",
-    "react": "~19.1.x",
-    "react-dom": "~19.1.x",
-    "ui": "^0.2.4"
-  },
-  "devDependencies": {
-    "@types/node": "24.0.10",
-    "@types/react": "~18.2.x",
-    "@types/react-dom": "~18.2.x",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
-    "config": "^4.0.0",
-    "eslint": "^8.56.0",
-    "eslint-config-next": "^15.3.4",
-    "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-prettier": "^5.2.0",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "typescript": "~5.8.x"
-  }
-}
-```
-
-## `apps/web/tsconfig.json`
-
-```json
-{
-  "compilerOptions": {
-    "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
-    "noEmit": true,
-    "incremental": true,
-    "module": "esnext",
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve"
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
-}
-```
-
-## `apps/web/.eslintrc.cjs`
-
-```javascript
-module.exports = {
-  root: true,
-  extends: [
-    'next/core-web-vitals',
-    '../../packages/config/.eslintrc.cjs'
-  ],
-  parserOptions: {
-    project: './tsconfig.json',
-    tsconfigRootDir: __dirname,
-  },
-  rules: {
-    // Add any Next.js specific rules here
-  }
-};
-```
-
 ## `apps/api/package.json`
 
 ```json
@@ -194,18 +110,37 @@ module.exports = {
   "name": "api",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "nest build --watch",
+    "dev": "dotenv -e ../../.env -- nest start --watch",
     "build": "nest build -p tsconfig.json",
+    "build:tsc": "tsc -p tsconfig.json --listEmittedFiles",
+    "start:dev": "nest start --watch",
     "start": "node dist/main",
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
     "@nestjs/common": "~11.1.3",
     "@nestjs/core": "~11.1.3",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/mapped-types": "^2.1.0",
+    "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "~11.1.3",
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.9",
+    "@types/express": "^5.0.3",
+    "@types/passport-jwt": "^4.0.1",
+    "@types/passport-local": "^1.0.38",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "db": "workspace:*",
+    "email": "workspace:*",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "zod": "^3.25.68"
   },
   "devDependencies": {
     "@nestjs/cli": "11.0.7",
@@ -217,6 +152,8 @@ module.exports = {
     "eslint": "8.56.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "~5.8.3"
   }
 }
@@ -228,128 +165,30 @@ module.exports = {
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "es6",
+    "module": "ESNext",
+    "target": "ES2022",
+    "moduleResolution": "Bundler",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "noEmit": false,
     "outDir": "dist",
     "baseUrl": ".",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": ["./src/*"],
+      "email": ["../../packages/email"],
+      "db": ["../../packages/db"],
+      "config/*": ["../../packages/config/*"]
+    },
+    "typeRoots": ["../../node_modules/@types", "./node_modules/@types"]
   },
-  "include": ["**/*.ts"],
-  "exclude": ["node_modules"]
+  "watchOptions": {
+    "watchFile": "fixedPollingInterval"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
-```
-
-## `apps/api/.eslintrc.cjs`
-
-```javascript
-module.exports = {
-  root: true,
-  extends: [
-    'plugin:@typescript-eslint/recommended',
-    '../../packages/config/.eslintrc.cjs'
-  ],
-  parserOptions: {
-    project: './tsconfig.json',
-    tsconfigRootDir: __dirname,
-  },
-  rules: {
-    // Add any Nest.js specific rules here
-  }
-};
-```
-
-## `apps/staff/package.json`
-
-```json
-{
-  "name": "staff",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "next dev -p 3002",
-    "build": "next build",
-    "start": "next start -p 3002",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "next": "~15.3.x",
-    "react": "~19.1.x",
-    "react-dom": "~19.1.x",
-    "ui": "*"
-  },
-  "devDependencies": {
-    "@types/node": "24.0.10",
-    "@types/react": "~18.2.x",
-    "@types/react-dom": "~18.2.x",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
-    "config": "^4.0.0",
-    "eslint": "^9.30.1",
-    "eslint-config-next": "^15.3.4",
-    "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-prettier": "^5.2.0",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "typescript": "~5.8.x"
-  }
-}
-```
-
-## `apps/staff/tsconfig.json`
-
-```json
-{
-  "compilerOptions": {
-    "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
-    "noEmit": true,
-    "incremental": true,
-    "module": "esnext",
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve"
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
-}
-```
-
-## `apps/staff/.eslintrc.cjs`
-
-```javascript
-module.exports = {
-  root: true,
-  extends: [
-    'next/core-web-vitals',
-    '../../packages/config/.eslintrc.cjs'
-  ],
-  parserOptions: {
-    project: './tsconfig.json',
-    tsconfigRootDir: __dirname,
-  },
-  rules: {
-    // Add any Next.js specific rules here
-  }
-};
 ```
 
 ## `packages/db/package.json`
@@ -359,19 +198,19 @@ module.exports = {
   "name": "db",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
-  "main": "./index.ts",
-  "types": "./index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
+    "build": "tsc -p tsconfig.json",
     "db:push": "dotenv -e ../../.env -- npx prisma db push",
     "db:seed": "npx dotenv -e ../../.env -- npx ts-node seed.ts"
   },
   "dependencies": {
+    "@nestjs/common": "~11.1.3",
     "@prisma/client": "6.11.0"
   },
   "devDependencies": {
     "@types/node": "^24.0.10",
-    "bcryptjs": "^2.4.3",
     "config": "^4.0.0",
     "prisma": "~6.11.0",
     "ts-node": "^10.9.2",
@@ -380,125 +219,76 @@ module.exports = {
 }
 ```
 
-## `packages/db/.eslintrc.cjs`
-
-```javascript
-module.exports = {
-  root: true,
-  extends: ["../config/.eslintrc.cjs"],
-};
-```
-
-## `packages/ui/package.json`
+## `packages/db/tsconfig.json`
 
 ```json
 {
-  "name": "ui",
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "module": "CommonJS",
+    "outDir": "./dist",
+    "declaration": true
+  },
+  "include": ["*.ts"],
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+## `packages/email/package.json`
+
+```json
+{
+  "name": "email",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
-  "main": "./index.tsx",
-  "types": "./index.tsx",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
+    "build": "tsc -p tsconfig.json",
     "lint": "eslint . --max-warnings 0"
   },
+  "dependencies": {
+    "@nestjs/common": "~11.1.3"
+  },
   "devDependencies": {
-    "@types/react": "~18.2.79",
-    "@typescript-eslint/eslint-plugin": "^7.3.1",
-    "@typescript-eslint/parser": "^7.3.1",
-    "config": "^4.0.0",
-    "eslint": "^9.30.1",
-    "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-prettier": "^5.2.0",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "react": "~19.1.x",
     "typescript": "~5.8.x"
   }
 }
 ```
 
-## `packages/ui/.eslintrc.cjs`
-
-```javascript
-module.exports = {
-  root: true,
-  extends: ["../config/.eslintrc.cjs"],
-};
-```
-
-## `packages/config/package.json`
+## `packages/email/tsconfig.json`
 
 ```json
 {
-  "name": "config",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "main": "index.js",
-  "devDependencies": {
-    "@eslint/js": "^9.30.1",
-    "@rushstack/eslint-patch": "^1.12.0",
-    "@typescript-eslint/eslint-plugin": "^8.35.1",
-    "@typescript-eslint/parser": "^8.35.1",
-    "eslint-config-next": "^15.3.4",
-    "typescript": "~5.8.x"
-  }
-}
-```
-
-## `packages/config/.eslintrc.cjs`
-
-```javascript
-module.exports = {
-  extends: [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier"
-  ],
-  parser: "@typescript-eslint/parser",
-  parserOptions: {
-    project: "./tsconfig.json",
-    tsconfigRootDir: __dirname,
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "module": "CommonJS",
+    "outDir": "dist",
+    "baseUrl": "."
   },
-  plugins: ["@typescript-eslint"],
-  rules: {
-    // Add any custom rules here
-  },
-  ignorePatterns: [".eslintrc.cjs"],
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }
 ```
 
 # Summary of Actions Taken
 
-1.  **Initial Project Setup:**
-    *   Created the monorepo directory structure (`apps` and `packages`).
-    *   Initialized `package.json` and `turborepo.json` in the root.
-    *   Installed initial dependencies.
-    *   Created `.env.example` and `docker-compose.yml` for the database.
-    *   Added a `README.md` and `.gitignore`.
+1.  **Authentication System Refactor:**
+    *   Replaced the deprecated `lucia-auth` library with `Passport.js` for a more robust and standard authentication system.
+    *   Implemented JWT-based stateless authentication.
+    *   Removed Lucia-specific models (`Session`, `Account`) from the Prisma schema.
 
-2.  **Database Setup:**
-    *   Configured the `db` package with `schema.prisma`.
-    *   Installed Prisma and other dependencies for the `db` package.
-    *   Successfully pushed the database schema.
+2.  **Monorepo and Build System Fixes:**
+    *   Corrected the root `dev` script to ensure shared packages are built before applications are started, resolving build order issues.
+    *   Fixed `tsconfig.json` files for shared packages (`db`, `email`) to allow them to be compiled independently (`"noEmit": false`).
+    *   Aligned module systems (`ESNext` for the API, `CommonJS` for packages) and added explicit `.js` extensions to relative imports to fix `ERR_MODULE_NOT_FOUND` runtime errors.
+    *   Resolved workspace dependency issues by adding explicit `workspace:*` dependencies for `db` and `email` in the `api`'s `package.json`.
+    *   Fixed the `api`'s `dev` script to correctly load environment variables using `dotenv-cli`.
 
-3.  **ESLint and TypeScript Configuration:**
-    *   Encountered and resolved numerous ESLint and TypeScript configuration issues.
-    *   Initially attempted a flat config (`eslint.config.js`) but reverted to `.eslintrc.cjs` due to compatibility issues with Next.js.
-    *   Corrected `extends` paths in all `.eslintrc.cjs` files.
-    *   Resolved module type conflicts by adding `"type": "module"` to `package.json` files and renaming `.eslintrc.js` to `.eslintrc.cjs`.
-    *   Installed all necessary ESLint plugins and parsers (`@typescript-eslint/eslint-plugin`, `@typescript-eslint/parser`, `eslint-config-next`, etc.).
-    *   Corrected decorator-related errors in the `api`'s `tsconfig.json`.
-    *   Centralized the main `tsconfig.json` and ESLint configurations to ensure consistency.
+3.  **Dependency Cleanup:**
+    *   Identified and attempted to resolve numerous `eslint` peer dependency conflicts by using `pnpm.overrides`.
+    *   Cleaned up the workspace by removing stray `node_modules` folders and `pnpm-lock.yaml` files, then running a clean install from the root.
 
-4.  **Application and Package Initialization:**
-    *   Initialized the `web`, `api`, and `staff` applications with their respective `package.json`, `tsconfig.json`, and `.eslintrc.cjs` files.
-    *   Initialized the `ui` and `config` packages similarly.
-    *   Added sample pages and components to avoid "No inputs found" errors.
-
-5.  **Final Verification:**
-    *   Ran `pnpm lint` and `pnpm build` to ensure there are no errors.
-    *   Successfully started the development server for all applications using `pnpm dev`.
-
-The project is now in a stable state, adhering to the guidelines, and ready for further development.
+The project is now in a stable, runnable state with a modernized authentication system and a corrected build process.

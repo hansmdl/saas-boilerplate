@@ -1,28 +1,50 @@
 import {
   ConflictException,
-  Inject,
   Injectable,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import type { Lucia } from 'lucia';
-import { PrismaClient, User } from 'db';
-import type { RegisterDto } from './dto/register.dto';
+import type { User } from 'db';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import type { LoginDto } from './dto/login.dto';
 import { randomUUID } from 'crypto';
-import { emailService } from 'email';
+import { EmailService } from 'email';
+import type { RegisterDto } from './dto/register.dto';
 import type { ForgotPasswordDto } from './dto/forgot-password.dto';
 import type { ResetPasswordDto } from './dto/reset-password.dto';
 import type { SendVerificationEmailDto } from './dto/send-verification-email.dto';
 
+import { PrismaService } from 'db';
+
 @Injectable()
 export class AuthService {
-  private readonly prisma = new PrismaClient();
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly emailService: EmailService,
+    private readonly prisma: PrismaService,
+  ) {}
 
-  constructor(@Inject('LUCIA') private readonly lucia: Lucia) {}
+  async validateUser(email: string, pass: string): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
 
-  async register(registerDto: RegisterDto) {
+    if (user && user.password) {
+      const isValidPassword = await bcrypt.compare(pass, user.password);
+      if (isValidPassword) {
+        return user;
+      }
+    }
+    return null;
+  }
+
+  async login(user: Omit<User, 'password'>) {
+    const payload = { email: user.email, sub: user.id };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
+  }
+
+  async register(registerDto: RegisterDto): Promise<User> {
     const { email, password } = registerDto;
 
     const existingUser = await this.prisma.user.findUnique({
@@ -44,33 +66,7 @@ export class AuthService {
 
     await this.sendVerificationEmail({ email: user.email });
 
-    const session = await this.lucia.createSession(user.id, {});
-    return this.lucia.createSessionCookie(session.id);
-  }
-
-  async login(loginDto: LoginDto) {
-    const { email, password } = loginDto;
-
-    const user = await this.prisma.user.findUnique({
-      where: { email },
-    });
-
-    if (!user || !user.password) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    const isValidPassword = await bcrypt.compare(password, user.password);
-
-    if (!isValidPassword) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    const session = await this.lucia.createSession(user.id, {});
-    return this.lucia.createSessionCookie(session.id);
-  }
-
-  async logout(sessionId: string) {
-    await this.lucia.invalidateSession(sessionId);
+    return user;
   }
 
   async forgotPassword(forgotPasswordDto: ForgotPasswordDto): Promise<void> {
@@ -93,7 +89,7 @@ export class AuthService {
       },
     });
 
-    await emailService.sendPasswordResetEmail(email, token);
+    await this.emailService.sendPasswordResetEmail(email, token);
   }
 
   async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<void> {
@@ -149,7 +145,7 @@ export class AuthService {
       },
     });
 
-    await emailService.sendEmailVerificationEmail(email, token);
+    await this.emailService.sendEmailVerificationEmail(email, token);
   }
 
   async verifyEmail(token: string): Promise<void> {
