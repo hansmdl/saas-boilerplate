@@ -1,0 +1,146 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum OrganizationRole {
+  OWNER
+  ADMIN
+  MEMBER
+  BILLING_MANAGER
+}
+
+model User {
+  id             String   @id @default(uuid())
+  email          String   @unique
+  password       String?  // Opcional si usan social login
+  name           String?
+  emailVerified  Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  isSuperAdmin   Boolean  @default(false) // Rol global
+
+  // Relación con las organizaciones a las que pertenece
+  memberships    Membership[]
+  // TODO: Añadir más campos según sea necesario para login
+
+  // Campos para 2FA
+  twoFactorAuthenticationSecret   String?
+  isTwoFactorAuthenticationEnabled Boolean @default(false)
+}
+
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relación con los miembros del equipo
+  members   Membership[]
+  invitations Invitation[]
+
+  // Relación con el cliente de facturación
+  customer    Customer?
+}
+
+model Membership {
+  id             String   @id @default(uuid())
+  role           OrganizationRole @default(MEMBER)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relaciones
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId]) // Un usuario solo puede tener una membresía por organización
+}
+
+model Invitation {
+  id             String   @id @default(uuid())
+  email          String   // Email de la persona invitada
+  role           OrganizationRole @default(MEMBER)
+  token          String   @unique
+  expiresAt      DateTime
+  createdAt      DateTime @default(now())
+
+  // Relaciones
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, email]) // No se puede invitar al mismo email dos veces a la misma organización
+}
+
+// =================================================================================
+// BILLING MODELS
+// =================================================================================
+
+enum SubscriptionPlan {
+  FREE
+  PRO
+  BUSINESS
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  INCOMPLETE
+  PAST_DUE
+  TRIALING
+}
+
+model Customer {
+  id             String   @id // Stripe Customer ID (cus_...)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relación con la organización
+  organizationId String       @unique
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  // Relación con la suscripción
+  subscription   Subscription?
+}
+
+model Subscription {
+  id                   String             @id // Stripe Subscription ID (sub_...)
+  status               SubscriptionStatus
+  plan                 SubscriptionPlan
+  priceId              String? // Stripe Price ID (price_...)
+  
+  currentPeriodStart   DateTime
+  currentPeriodEnd     DateTime
+  
+  cancelAtPeriodEnd    Boolean            @default(false)
+  canceledAt           DateTime?
+  
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  // Relación con el cliente
+  customerId           String             @unique
+  customer             Customer           @relation(fields: [customerId], references: [id], onDelete: Cascade)
+}
+
+model MagicLink {
+  id        String   @id @default(uuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
