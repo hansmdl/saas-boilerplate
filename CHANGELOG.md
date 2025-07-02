@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - `Account` model to support OAuth social logins.
 - `Session` model to manage user refresh tokens.
 - `PasswordResetToken` model for the password recovery flow.
@@ -15,26 +16,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Configured Lucia Auth with Prisma adapter.
 - Implemented email/password registration endpoint.
 - Implemented email/password login endpoint.
+- Implemented session validation (`/me`) and logout endpoints.
+- Added `AuthGuard` for protecting routes.
 
 ### Changed
+
 - Updated `Subscription` model with `trialStart` and `trialEnd` fields.
 - Swapped `bcryptjs` for `bcrypt` due to typing issues.
 
+### Notes
+
+- Magic Links, Social Login (OAuth), and 2FA functionalities are deferred to a future stage.
+
 ### Deprecated
-- 
+
+-
 
 ### Removed
-- 
+
+-
 
 ### Fixed
-- 
+
+-
 
 ### Security
-- 
+
+-
 
 ## [0.1.0] - 2025-07-02
 
-### Added
+### Added- 2025-07-02
+
 - Initial project structure with monorepo configuration (Turborepo, pnpm workspaces).
 - Basic setup for `web`, `api`, and `staff` applications.
 - Shared packages for `ui`, `config`, `db`, and `email`.

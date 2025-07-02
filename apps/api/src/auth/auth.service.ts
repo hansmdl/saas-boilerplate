@@ -60,4 +60,8 @@ export class AuthService {
     const session = await this.lucia.createSession(user.id, {});
     return this.lucia.createSessionCookie(session.id);
   }
+
+  async logout(sessionId: string) {
+    await this.lucia.invalidateSession(sessionId);
+  }
 }
