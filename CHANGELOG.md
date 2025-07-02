@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Account` model to support OAuth social logins.
 - `Session` model to manage user refresh tokens.
 - `PasswordResetToken` model for the password recovery flow.
+- Initial `AuthModule` and `AuthService` setup in the API.
+- Configured Lucia Auth with Prisma adapter.
 
 ### Changed
 - Updated `Subscription` model with `trialStart` and `trialEnd` fields.

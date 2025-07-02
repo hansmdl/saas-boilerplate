@@ -7,7 +7,9 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "db": ["../../packages/db"],
+      "config/*": ["../../packages/config/*"]
     }
   },
   "include": ["**/*.ts"],
