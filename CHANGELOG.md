@@ -13,9 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `PasswordResetToken` model for the password recovery flow.
 - Initial `AuthModule` and `AuthService` setup in the API.
 - Configured Lucia Auth with Prisma adapter.
+- Implemented email/password registration endpoint.
+- Implemented email/password login endpoint.
 
 ### Changed
 - Updated `Subscription` model with `trialStart` and `trialEnd` fields.
+- Swapped `bcryptjs` for `bcrypt` due to typing issues.
 
 ### Deprecated
 - 
