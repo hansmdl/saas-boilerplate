@@ -10,8 +10,9 @@
       "@/*": ["./src/*"],
       "db": ["../../packages/db"],
       "config/*": ["../../packages/config/*"]
-    }
+    },
+    "typeRoots": ["../../node_modules/@types", "./node_modules/@types"]
   },
-  "include": ["**/*.ts"],
+  "include": ["**/*.ts", "src/types/**/*.d.ts"],
   "exclude": ["node_modules"]
 }
