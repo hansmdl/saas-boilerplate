@@ -34,7 +34,10 @@ model User {
 
   // Relación con las organizaciones a las que pertenece
   memberships    Membership[]
-  // TODO: Añadir más campos según sea necesario para login
+  
+  // Relaciones para Auth
+  accounts       Account[]
+  sessions       Session[]
 
   // Campos para 2FA
   twoFactorAuthenticationSecret   String?
@@ -53,6 +56,33 @@ model Organization {
 
   // Relación con el cliente de facturación
   customer    Customer?
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Membership {
@@ -125,6 +155,8 @@ model Subscription {
   
   currentPeriodStart   DateTime
   currentPeriodEnd     DateTime
+  trialStart           DateTime?
+  trialEnd             DateTime?
   
   cancelAtPeriodEnd    Boolean            @default(false)
   canceledAt           DateTime?
@@ -143,4 +175,14 @@ model MagicLink {
   token     String   @unique
   expiresAt DateTime
   createdAt DateTime @default(now())
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@unique([email, token])
 }
