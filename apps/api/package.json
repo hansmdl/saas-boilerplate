@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "dotenv -e ../../.env -- nest start --watch",
+    "dev:env": "node scripts/start-dev.js",
     "build": "nest build -p tsconfig.json",
     "build:tsc": "tsc -p tsconfig.json --listEmittedFiles",
     "start:dev": "nest start --watch",
     "start": "node dist/main",
     "lint": "eslint . --max-warnings 0",
-    "test": "ts-node node_modules/vitest/vitest.mjs run"
+    "test:e2e:jest": "tsc -p tsconfig.e2e.json && jest --config jest-e2e.config.js --runInBand",
+    "test:e2e:app": "jest --config jest-e2e.config.js --runInBand test/app.e2e-spec.ts"
   },
   "dependencies": {
     "@nestjs/common": "~11.1.3",
@@ -48,10 +50,12 @@
     "eslint": "8.56.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.1",
+    "jest": "^30.0.4",
+    "jest-environment-node": "^30.0.4",
     "supertest": "^7.1.1",
+    "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "~5.8.3",
-    "vitest": "^3.2.4",
-    "ts-node": "^10.9.2"
+    "typescript": "~5.8.3"
   }
 }

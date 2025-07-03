@@ -1,0 +1,29 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "target": "ES2022",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "noEmit": false,
+        "outDir": "dist",
+        "rootDir": ".",
+        "baseUrl": ".",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "strict": true,
+        "paths": {
+            "@/*": ["./src/*"],
+            "email": ["../../packages/email"],
+            "db": ["../../packages/db"],
+            "config/*": ["../../packages/config/*"]
+        },
+        "typeRoots": ["../../node_modules/@types", "./node_modules/@types"]
+    },
+    "watchOptions": {
+        "watchFile": "fixedPollingInterval"
+    },
+    "include": ["src", "test", "jest-e2e.config.js"],
+    "exclude": ["node_modules", "dist"]
+}

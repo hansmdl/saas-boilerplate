@@ -8,7 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "noEmit": false,
     "outDir": "dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "baseUrl": ".",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -25,6 +25,6 @@
   "watchOptions": {
     "watchFile": "fixedPollingInterval"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src", "test", "jest-e2e.config.js"],
   "exclude": ["node_modules", "dist"]
 }

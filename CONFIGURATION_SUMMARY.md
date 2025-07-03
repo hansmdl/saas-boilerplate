@@ -110,14 +110,18 @@ This document provides a complete overview of all the configuration files and de
   "name": "api",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "dev": "dotenv -e ../../.env -- nest start --watch",
+    "dev": "nest start --watch",
+    "dev:env": "node scripts/start-dev.js",
     "build": "nest build -p tsconfig.json",
     "build:tsc": "tsc -p tsconfig.json --listEmittedFiles",
     "start:dev": "nest start --watch",
     "start": "node dist/main",
-    "lint": "eslint . --max-warnings 0"
+    "lint": "eslint . --max-warnings 0",
+    "test": "vitest run",
+    "test:e2e": "vitest run test/app.e2e-spec.ts test/auth.e2e-spec.ts test/organization.e2e-spec.ts",
+    "test:e2e:jest": "tsc -p tsconfig.e2e.json && jest --config jest-e2e.config.js --runInBand",
+    "test:e2e:app": "jest --config jest-e2e.config.js --runInBand test/app.e2e-spec.ts"
   },
   "dependencies": {
     "@nestjs/common": "~11.1.3",
@@ -145,16 +149,25 @@ This document provides a complete overview of all the configuration files and de
   "devDependencies": {
     "@nestjs/cli": "11.0.7",
     "@nestjs/schematics": "11.0.5",
+    "@nestjs/testing": "^11.1.3",
+    "@types/jest": "^30.0.0",
     "@types/node": "24.0.10",
+    "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
     "config": "^4.0.0",
+    "dotenv": "^17.0.1",
     "eslint": "8.56.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.1",
+    "jest": "^30.0.4",
+    "jest-environment-node": "^30.0.4",
+    "supertest": "^7.1.1",
+    "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "~5.8.3"
+    "typescript": "~5.8.3",
+    "vitest": "^3.2.4"
   }
 }
 ```
@@ -165,16 +178,18 @@ This document provides a complete overview of all the configuration files and de
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "module": "ESNext",
+    "module": "commonjs",
+    "moduleResolution": "node",
     "target": "ES2022",
-    "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "noEmit": false,
     "outDir": "dist",
+    "rootDir": ".",
     "baseUrl": ".",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "strict": true,
     "paths": {
       "@/*": ["./src/*"],
       "email": ["../../packages/email"],
@@ -183,10 +198,11 @@ This document provides a complete overview of all the configuration files and de
     },
     "typeRoots": ["../../node_modules/@types", "./node_modules/@types"]
   },
+
   "watchOptions": {
     "watchFile": "fixedPollingInterval"
   },
-  "include": ["src/**/*"],
+  "include": ["src", "test", "jest-e2e.config.js"],
   "exclude": ["node_modules", "dist"]
 }
 ```

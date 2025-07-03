@@ -26,4 +26,29 @@ export class OrganizationService {
 
     return organization;
   }
+
+  async findAll(userId: string) {
+    return this.prisma.organization.findMany({
+      where: {
+        members: {
+          some: {
+            userId,
+          },
+        },
+      },
+    });
+  }
+
+  async findOne(id: string, userId: string) {
+    return this.prisma.organization.findFirst({
+      where: {
+        id,
+        members: {
+          some: {
+            userId,
+          },
+        },
+      },
+    });
+  }
 }

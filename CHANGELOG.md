@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - **Build and Module System**: Resolved a critical conflict between ES Modules and CommonJS configurations that was causing compilation failures. Aligned the entire `api` application and its dependencies to use CommonJS, ensuring compatibility with NestJS's standard module system. This included removing `"type": "module"` from `apps/api/package.json` and adjusting `tsconfig.json` settings.
+- **Testing Framework**: Migrated from Vitest to Jest for e2e testing to resolve persistent module resolution issues.
+- **E2E Tests**: Corrected multiple issues in the e2e tests, including incorrect status code expectations, payload mismatches, and missing API endpoints. All e2e tests for `app`, `auth`, and `organization` are now passing.
+- **Environment Loading**: Corrected the `dev` script to ensure the API server correctly loads environment variables from the root `.env` file on startup, resolving the `JWT_SECRET` error.
 
 ### Changed
 

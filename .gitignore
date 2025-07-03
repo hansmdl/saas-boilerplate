@@ -44,4 +44,11 @@ pnpm-debug.log*
 # Build output
 dist
 .next
+*/dist
+build
+next
+*/build
+*/next
+*/next
+*/.next
 build

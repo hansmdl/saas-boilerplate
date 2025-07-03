@@ -26,8 +26,7 @@ export class AuthController {
   @Post('register')
   @UsePipes(new ZodValidationPipe(registerSchema))
   async register(@Body() registerDto: RegisterDto) {
-    await this.authService.register(registerDto);
-    return { message: 'User registered successfully. Please check your email for verification.' };
+    return this.authService.register(registerDto);
   }
 
   @UseGuards(AuthGuard('local'))
