@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.3] - 2025-07-03
+
+### Fixed
+
+- **Dependency Conflicts**: Resolved multiple dependency warnings and peer dependency conflicts by removing local `eslint` and `@types/axios` definitions from workspace packages (`api`, `web`). This ensures all packages use the single, up-to-date versions defined in the root `package.json`, stabilizing the dependency tree.
+
 ## [0.2.2] - 2025-07-03
 
 ### Added

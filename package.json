@@ -44,7 +44,6 @@
   },
   "pnpm": {
     "overrides": {
-      "eslint": "^8.57.0",
       "@typescript-eslint/eslint-plugin": "^8.0.0",
       "@typescript-eslint/parser": "^8.0.0"
     },
@@ -52,6 +51,7 @@
       "@nestjs/core",
       "@prisma/client",
       "@prisma/engines",
+      "@tailwindcss/oxide",
       "bcrypt",
       "esbuild",
       "msgpackr-extract",
