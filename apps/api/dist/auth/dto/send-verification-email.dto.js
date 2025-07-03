@@ -1,4 +1,7 @@
-import { z } from 'zod';
-export const sendVerificationEmailSchema = z.object({
-    email: z.string().email('Invalid email address'),
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.sendVerificationEmailSchema = void 0;
+const zod_1 = require("zod");
+exports.sendVerificationEmailSchema = zod_1.z.object({
+    email: zod_1.z.string().email('Invalid email address'),
 });

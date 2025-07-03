@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Build and Module System**: Resolved a critical conflict between ES Modules and CommonJS configurations that was causing compilation failures. Aligned the entire `api` application and its dependencies to use CommonJS, ensuring compatibility with NestJS's standard module system. This included removing `"type": "module"` from `apps/api/package.json` and adjusting `tsconfig.json` settings.
+
 ### Changed
 
 - **Major Authentication Refactor**: Replaced the deprecated `lucia-auth` library with a robust implementation using `Passport.js` (`@nestjs/passport`, `@nestjs/jwt`, `passport-local`, `passport-jwt`). The new system uses stateless JWTs for session management.

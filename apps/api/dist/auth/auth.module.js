@@ -1,34 +1,37 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-import { Module } from '@nestjs/common';
-import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
-import { AuthService } from './auth.service.js';
-import { AuthController } from './auth.controller.js';
-import { LocalStrategy } from './strategies/local.strategy.js';
-import { JwtStrategy } from './strategies/jwt.strategy.js';
-import { EmailModule } from "email";
-import { DbModule } from "db";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AuthModule = void 0;
+const common_1 = require("@nestjs/common");
+const passport_1 = require("@nestjs/passport");
+const jwt_1 = require("@nestjs/jwt");
+const auth_service_1 = require("./auth.service");
+const auth_controller_1 = require("./auth.controller");
+const local_strategy_1 = require("./strategies/local.strategy");
+const jwt_strategy_1 = require("./strategies/jwt.strategy");
+const email_1 = require("email");
+const db_1 = require("db");
 let AuthModule = class AuthModule {
 };
-AuthModule = __decorate([
-    Module({
+exports.AuthModule = AuthModule;
+exports.AuthModule = AuthModule = __decorate([
+    (0, common_1.Module)({
         imports: [
-            EmailModule,
-            DbModule,
-            PassportModule,
-            JwtModule.register({
+            email_1.EmailModule,
+            db_1.DbModule,
+            passport_1.PassportModule,
+            jwt_1.JwtModule.register({
                 secret: process.env.JWT_SECRET,
                 signOptions: { expiresIn: '1h' },
             }),
         ],
-        controllers: [AuthController],
-        providers: [AuthService, LocalStrategy, JwtStrategy],
-        exports: [AuthService],
+        controllers: [auth_controller_1.AuthController],
+        providers: [auth_service_1.AuthService, local_strategy_1.LocalStrategy, jwt_strategy_1.JwtStrategy],
+        exports: [auth_service_1.AuthService],
     })
 ], AuthModule);
-export { AuthModule };

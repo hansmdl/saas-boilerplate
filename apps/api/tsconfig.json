@@ -1,16 +1,18 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "module": "ESNext",
+    "module": "commonjs",
+    "moduleResolution": "node",
     "target": "ES2022",
-    "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "noEmit": false,
     "outDir": "dist",
+    "rootDir": "./src",
     "baseUrl": ".",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "strict": true,
     "paths": {
       "@/*": ["./src/*"],
       "email": ["../../packages/email"],
@@ -19,9 +21,10 @@
     },
     "typeRoots": ["../../node_modules/@types", "./node_modules/@types"]
   },
+
   "watchOptions": {
     "watchFile": "fixedPollingInterval"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

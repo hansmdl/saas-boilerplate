@@ -1,5 +1,8 @@
-import { BadRequestException } from '@nestjs/common';
-export class ZodValidationPipe {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ZodValidationPipe = void 0;
+const common_1 = require("@nestjs/common");
+class ZodValidationPipe {
     schema;
     constructor(schema) {
         this.schema = schema;
@@ -9,8 +12,9 @@ export class ZodValidationPipe {
             this.schema.parse(value);
         }
         catch (error) {
-            throw new BadRequestException('Validation failed');
+            throw new common_1.BadRequestException('Validation failed');
         }
         return value;
     }
 }
+exports.ZodValidationPipe = ZodValidationPipe;

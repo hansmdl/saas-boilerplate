@@ -8,10 +8,10 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import { EmailService } from 'email';
-import type { RegisterDto } from './dto/register.dto';
-import type { ForgotPasswordDto } from './dto/forgot-password.dto';
-import type { ResetPasswordDto } from './dto/reset-password.dto';
-import type { SendVerificationEmailDto } from './dto/send-verification-email.dto';
+import type { RegisterDto } from './dto/register.dto.js';
+import type { ForgotPasswordDto } from './dto/forgot-password.dto.js';
+import type { ResetPasswordDto } from './dto/reset-password.dto.js';
+import type { SendVerificationEmailDto } from './dto/send-verification-email.dto.js';
 
 import { PrismaService } from 'db';
 

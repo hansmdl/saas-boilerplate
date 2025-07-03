@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,16 +11,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { Body, Controller, Get, Param, Post, Request, UseGuards, UsePipes, } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { AuthService } from './auth.service.js';
-import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
-import { ZodValidationPipe } from '../pipes/zod.pipe.js';
-import { registerSchema } from './dto/register.dto.js';
-import { loginSchema } from './dto/login.dto.js';
-import { forgotPasswordSchema } from './dto/forgot-password.dto.js';
-import { resetPasswordSchema } from './dto/reset-password.dto.js';
-import { CurrentUser } from './decorators/user.decorator.js';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AuthController = void 0;
+const common_1 = require("@nestjs/common");
+const passport_1 = require("@nestjs/passport");
+const auth_service_1 = require("./auth.service");
+const jwt_auth_guard_1 = require("./guards/jwt-auth.guard");
+const zod_pipe_1 = require("../pipes/zod.pipe");
+const register_dto_1 = require("./dto/register.dto");
+const login_dto_1 = require("./dto/login.dto");
+const forgot_password_dto_1 = require("./dto/forgot-password.dto");
+const reset_password_dto_1 = require("./dto/reset-password.dto");
+const user_decorator_1 = require("./decorators/user.decorator");
 let AuthController = class AuthController {
     authService;
     constructor(authService) {
@@ -53,64 +56,64 @@ let AuthController = class AuthController {
         return { message: 'Email verified successfully' };
     }
 };
+exports.AuthController = AuthController;
 __decorate([
-    Post('register'),
-    UsePipes(new ZodValidationPipe(registerSchema)),
-    __param(0, Body()),
+    (0, common_1.Post)('register'),
+    (0, common_1.UsePipes)(new zod_pipe_1.ZodValidationPipe(register_dto_1.registerSchema)),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "register", null);
 __decorate([
-    UseGuards(AuthGuard('local')),
-    Post('login'),
-    UsePipes(new ZodValidationPipe(loginSchema)),
-    __param(0, Request()),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('local')),
+    (0, common_1.Post)('login'),
+    (0, common_1.UsePipes)(new zod_pipe_1.ZodValidationPipe(login_dto_1.loginSchema)),
+    __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
 __decorate([
-    UseGuards(JwtAuthGuard),
-    Get('me'),
-    __param(0, CurrentUser()),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Get)('me'),
+    __param(0, (0, user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "me", null);
 __decorate([
-    Post('forgot-password'),
-    UsePipes(new ZodValidationPipe(forgotPasswordSchema)),
-    __param(0, Body()),
+    (0, common_1.Post)('forgot-password'),
+    (0, common_1.UsePipes)(new zod_pipe_1.ZodValidationPipe(forgot_password_dto_1.forgotPasswordSchema)),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "forgotPassword", null);
 __decorate([
-    Post('reset-password'),
-    UsePipes(new ZodValidationPipe(resetPasswordSchema)),
-    __param(0, Body()),
+    (0, common_1.Post)('reset-password'),
+    (0, common_1.UsePipes)(new zod_pipe_1.ZodValidationPipe(reset_password_dto_1.resetPasswordSchema)),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "resetPassword", null);
 __decorate([
-    UseGuards(JwtAuthGuard),
-    Post('send-verification-email'),
-    __param(0, CurrentUser()),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Post)('send-verification-email'),
+    __param(0, (0, user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "sendVerificationEmail", null);
 __decorate([
-    Get('verify-email/:token'),
-    __param(0, Param('token')),
+    (0, common_1.Get)('verify-email/:token'),
+    __param(0, (0, common_1.Param)('token')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "verifyEmail", null);
-AuthController = __decorate([
-    Controller('auth'),
-    __metadata("design:paramtypes", [AuthService])
+exports.AuthController = AuthController = __decorate([
+    (0, common_1.Controller)('auth'),
+    __metadata("design:paramtypes", [auth_service_1.AuthService])
 ], AuthController);
-export { AuthController };

@@ -1,5 +1,8 @@
-import { z } from 'zod';
-export const loginSchema = z.object({
-    email: z.string().email('Invalid email address'),
-    password: z.string(),
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.loginSchema = void 0;
+const zod_1 = require("zod");
+exports.loginSchema = zod_1.z.object({
+    email: zod_1.z.string().email('Invalid email address'),
+    password: zod_1.z.string(),
 });

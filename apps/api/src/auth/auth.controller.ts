@@ -9,14 +9,14 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthService } from './auth.service.js';
-import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
-import { ZodValidationPipe } from '../pipes/zod.pipe.js';
-import { registerSchema, type RegisterDto } from './dto/register.dto.js';
-import { loginSchema } from './dto/login.dto.js';
-import { forgotPasswordSchema, type ForgotPasswordDto } from './dto/forgot-password.dto.js';
-import { resetPasswordSchema, type ResetPasswordDto } from './dto/reset-password.dto.js';
-import { CurrentUser } from './decorators/user.decorator.js';
+import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { ZodValidationPipe } from '../pipes/zod.pipe';
+import { registerSchema, type RegisterDto } from './dto/register.dto';
+import { loginSchema } from './dto/login.dto';
+import { forgotPasswordSchema, type ForgotPasswordDto } from './dto/forgot-password.dto';
+import { resetPasswordSchema, type ResetPasswordDto } from './dto/reset-password.dto';
+import { CurrentUser } from './decorators/user.decorator';
 import type { User } from 'db';
 
 @Controller('auth')

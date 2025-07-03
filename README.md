@@ -8,7 +8,7 @@ This is a boilerplate for a SaaS application using the following technologies:
 - [Prisma](https://www.prisma.io/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [shadcn/ui](https://ui.shadcn.com/)
-- [Lucia Auth](https://lucia-auth.com/)
+- [Passport.js](http://www.passportjs.org/)
 - [React Query](https://tanstack.com/query/v5)
 - [Zustand](https://zustand-demo.pmnd.rs/)
 - [React Hook Form](https://react-hook-form.com/)
