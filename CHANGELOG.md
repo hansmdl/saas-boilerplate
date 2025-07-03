@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2] - 2025-07-03
+
+### Added
+
+- **Database Seeding**: Implemented a Prisma seed script to populate the database with test data, including users and organizations. Configured a `db:seed` script to run the process.
+- **Consistent Styling**: Applied a unified, modern, and light theme (`slate` and `blue` color palette) across both the `web` and `staff` applications for a consistent user experience.
+
+### Fixed
+
+- **Tailwind CSS v4 Syntax**: Corrected the global CSS files to use the modern `@import "tailwindcss";` directive, resolving the `Unknown at rule @tailwind` error.
+- **ESLint Monorepo Configuration**: Fixed a persistent ESLint parsing error by explicitly setting the `parserOptions.project` path in the `.eslintrc.cjs` file for the `db` package, ensuring it correctly lints all its TypeScript files.
+
 ## [0.2.1] - 2025-07-03
 
 ### Fixed

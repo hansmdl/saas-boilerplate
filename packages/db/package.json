@@ -4,10 +4,13 @@
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "db:push": "dotenv -e ../../.env -- npx prisma db push",
-    "db:seed": "npx dotenv -e ../../.env -- npx ts-node seed.ts"
+    "db:seed": "dotenv -e ../../.env -- npx prisma db seed"
   },
   "dependencies": {
     "@nestjs/common": "~11.1.3",
