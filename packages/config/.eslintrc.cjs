@@ -13,5 +13,5 @@ module.exports = {
   rules: {
     // Add any custom rules here
   },
-  ignorePatterns: [".eslintrc.cjs"],
+  ignorePatterns: [".eslintrc.cjs", "dist"],
 }

@@ -8,23 +8,21 @@
     "allowSyntheticDefaultImports": true,
     "noEmit": false,
     "outDir": "dist",
-    "rootDir": ".",
+
     "baseUrl": ".",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "strict": true,
+    "composite": true,
+    "useDefineForClassFields": false,
     "paths": {
-      "@/*": ["./src/*"],
-      "email": ["../../packages/email"],
-      "db": ["../../packages/db"],
-      "config/*": ["../../packages/config/*"]
+      "@/*": ["./src/*"]
     },
-    "typeRoots": ["../../node_modules/@types", "./node_modules/@types"]
+    "types": ["node", "jest"]
   },
-
   "watchOptions": {
     "watchFile": "fixedPollingInterval"
   },
-  "include": ["src", "test", "jest-e2e.config.js"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

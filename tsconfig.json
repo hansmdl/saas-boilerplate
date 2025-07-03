@@ -19,10 +19,14 @@
     "paths": {
       "ui/*": ["packages/ui/*"],
       "db": ["packages/db"],
-      "config/*": ["packages/config/*"],
+      "config/*": ["packages/config/dist/*"],
       "email": ["packages/email"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "references": [
+    { "path": "./apps/api" },
+    { "path": "./packages/config" }
+  ]
 }

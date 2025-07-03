@@ -7,29 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-
-- **Build and Module System**: Resolved a critical conflict between ES Modules and CommonJS configurations that was causing compilation failures. Aligned the entire `api` application and its dependencies to use CommonJS, ensuring compatibility with NestJS's standard module system. This included removing `"type": "module"` from `apps/api/package.json` and adjusting `tsconfig.json` settings.
-- **Testing Framework**: Migrated from Vitest to Jest for e2e testing to resolve persistent module resolution issues.
-- **E2E Tests**: Corrected multiple issues in the e2e tests, including incorrect status code expectations, payload mismatches, and missing API endpoints. All e2e tests for `app`, `auth`, and `organization` are now passing.
-- **Environment Loading**: Corrected the `dev` script to ensure the API server correctly loads environment variables from the root `.env` file on startup, resolving the `JWT_SECRET` error.
-
-### Changed
-
-- **Major Authentication Refactor**: Replaced the deprecated `lucia-auth` library with a robust implementation using `Passport.js` (`@nestjs/passport`, `@nestjs/jwt`, `passport-local`, `passport-jwt`). The new system uses stateless JWTs for session management.
+## [0.2.0] - 2025-07-03
 
 ### Removed
 
-- Removed `lucia` and `@lucia-auth/adapter-prisma` dependencies.
-- Removed `Session` and `Account` models from the Prisma schema as they were specific to the old authentication system.
+- **Email Queue System**: Completely removed the email sending functionality and its related dependencies (`@nestjs/bullmq`, `bullmq`) to resolve persistent dependency injection and build errors. This includes the removal of the `JobsModule`, `email.worker`, and all related queue logic from the API. The feature will be re-integrated in a future release.
 
 ### Fixed
 
-- **Monorepo Build System**: Corrected multiple issues preventing the backend from starting.
-- **TypeScript Configuration**: Fixed `tsconfig.json` files for shared packages (`db`, `email`) to ensure they are compiled correctly (`noEmit: false`).
-- **Module Resolution**: Resolved `ERR_MODULE_NOT_FOUND` errors by aligning package module systems (`CommonJS` vs `ESNext`) and adding explicit workspace dependencies.
-- **Dependency Conflicts**: Addressed and resolved numerous peer dependency conflicts, particularly with `eslint` and `@typescript-eslint`.
-- **Environment Loading**: Ensured the API server correctly loads environment variables from the root `.env` file on startup.
+- **Module Resolution**: Corrected several `tsconfig.json` path mappings and package `exports` to fix the `Cannot find module 'config/features'` error and ensure reliable module resolution across the monorepo.
+- **Build Configuration**: Restructured the `packages/config` workspace to use a standard `src` directory for source files and a `dist` directory for compiled output, aligning it with project conventions.
+
+### Changed
+
+- **Dependency Management**:
+  - Removed the deprecated `@types/axios` package.
+  - Removed `vitest` from dependencies, standardizing on Jest for testing.
+  - Updated `eslint` to the latest version to resolve deprecation warnings.
 
 ## [0.1.0] - 2025-07-02
 
