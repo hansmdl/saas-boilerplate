@@ -23,7 +23,7 @@
       "email": ["packages/email"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx","src/**/*  .ts", "src/**/*  .tsx"],
   "exclude": ["node_modules"],
   "references": [
     { "path": "./apps/api" },

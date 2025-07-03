@@ -8,7 +8,7 @@
     "build": "nest build -p tsconfig.json",
     "build:tsc": "tsc -p tsconfig.json --listEmittedFiles",
     "start:dev": "nest start --watch",
-    "start": "node dist/main",
+    "start": "node dist/src/main",
     "lint": "eslint . --max-warnings 0",
     "test:e2e:jest": "tsc -p tsconfig.e2e.json && jest --config jest-e2e.config.js --runInBand",
     "test:e2e:app": "jest --config jest-e2e.config.js --runInBand test/app.e2e-spec.ts"

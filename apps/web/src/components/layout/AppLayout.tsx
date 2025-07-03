@@ -1,41 +1,43 @@
 import React from 'react';
 
-interface AppLayoutProps {
-  children: React.ReactNode;
-}
-
-export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
+const AppLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* TODO: Implement Header component */}
-      <header className="bg-gray-800 text-white p-4">
-        <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold">SaaS Boilerplate</h1>
-          {/* TODO: Add user menu and workspace selector */}
-        </div>
-      </header>
-
-      <div className="flex flex-1">
-        {/* TODO: Implement Sidebar component */}
-        <aside className="w-64 bg-gray-900 text-white p-4">
-          <nav>
-            <ul>
-              <li className="mb-2"><a href="#" className="block hover:text-gray-300">Dashboard</a></li>
-              <li className="mb-2"><a href="#" className="block hover:text-gray-300">Settings</a></li>
-              {/* TODO: Add more navigation items */}
-            </ul>
+    <div className="min-h-screen bg-gray-100">
+      <div className="flex">
+        {/* Sidebar */}
+        <div className="w-64 bg-white shadow-md">
+          <div className="p-4">
+            <h2 className="text-xl font-bold">My SaaS</h2>
+          </div>
+          <nav className="mt-5">
+            <a
+              href="#"
+              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-200"
+            >
+              Dashboard
+            </a>
+            <a
+              href="#"
+              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-200"
+            >
+              Settings
+            </a>
           </nav>
-        </aside>
+        </div>
 
-        <main className="flex-1 p-6 bg-gray-100">
-          {children}
-        </main>
+        {/* Main content */}
+        <div className="flex-1 flex flex-col">
+          {/* Header */}
+          <header className="bg-white shadow-sm">
+            <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+              <h1 className="text-lg font-semibold text-gray-900">
+                Dashboard
+              </h1>
+            </div>
+          </header>
+          <main className="flex-1 p-6">{children}</main>
+        </div>
       </div>
-
-      {/* TODO: Implement Footer component */}
-      <footer className="bg-gray-800 text-white p-4 text-center">
-        <p>&copy; {new Date().getFullYear()} SaaS Boilerplate. All rights reserved.</p>
-      </footer>
     </div>
   );
 };

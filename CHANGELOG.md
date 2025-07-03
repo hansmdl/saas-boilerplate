@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2025-07-03
+
+### Fixed
+
+- **Web App Build**: Corrected an error in the `web` application by replacing a standard `<a>` tag with Next.js's `<Link>` component for client-side navigation, resolving a build failure.
+- **Tailwind CSS Configuration**: Updated the PostCSS configuration to be compatible with Tailwind CSS v4 by installing and using the `@tailwindcss/postcss` package.
+- **API Startup**: Resolved a `MODULE_NOT_FOUND` error in the `api` application by correcting the `sourceRoot` and adding the `entryFile` path in `nest-cli.json`, ensuring the development server starts correctly.
+
 ## [0.2.0] - 2025-07-03
 
 ### Removed

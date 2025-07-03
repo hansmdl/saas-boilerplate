@@ -22,7 +22,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "ui/*": ["../../packages/ui/*"],
-      "config/*": ["../../packages/config/*"] // Add this line
+      "config/*": ["../../packages/config/dist/*"]
     }
   },
   "include": [

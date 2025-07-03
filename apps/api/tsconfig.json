@@ -16,7 +16,8 @@
     "composite": true,
     "useDefineForClassFields": false,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "config/*": ["../../packages/config/src/*"]
     },
     "types": ["node", "jest"]
   },
